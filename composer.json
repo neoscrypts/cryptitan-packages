@@ -1,0 +1,39 @@
+{
+    "name": "neoscrypts/cryptonite",
+    "description": "Cryptonite packages",
+    "type": "library",
+    "autoload": {
+        "files": [
+            "src/Multipay/helpers.php",
+            "src/Exchanger/helpers.php"
+        ],
+        "psr-4": {
+            "NeoScrypts\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Henry Ogunrinde",
+            "email": "info@oluwatosin.me"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "ext-json": "*",
+        "illuminate/support" : "^8.0",
+        "illuminate/console" : "^8.0",
+        "illuminate/cache" : "^8.0",
+        "illuminate/database" : "^8.0",
+        "illuminate/http" : "^8.0",
+        "akaunting/laravel-money": "^1.2",
+        "paypal/paypal-checkout-sdk": "^1.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "NeoScrypts\\Multipay\\MultipayServiceProvider",
+                "NeoScrypts\\Exchanger\\ExchangerServiceProvider"
+            ]
+        }
+    }
+}
