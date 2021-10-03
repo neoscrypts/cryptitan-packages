@@ -13,6 +13,7 @@ class ExchangerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerResources();
         $this->registerExchanger();
         $this->registerCommands();
     }
@@ -68,7 +69,15 @@ class ExchangerServiceProvider extends ServiceProvider
                 __DIR__ . '/./database/migrations' => database_path('migrations'),
             ], 'migrations');
         }
+    }
 
+    /**
+     * Register resources
+     *
+     * @return void
+     */
+    protected function registerResources()
+    {
         $this->mergeConfigFrom(
             __DIR__ . '/./config/exchanger.php', 'exchanger'
         );

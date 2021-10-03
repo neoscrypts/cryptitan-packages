@@ -13,6 +13,7 @@ class MultipayServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerResources();
         $this->registerMultipay();
     }
 
@@ -23,7 +24,7 @@ class MultipayServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishResources();
+        $this->bootResources();
     }
 
     /**
@@ -43,12 +44,20 @@ class MultipayServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function publishResources()
+    protected function bootResources()
     {
         $this->publishes([
             __DIR__ . '/./config/multipay.php' => config_path('multipay.php'),
         ]);
+    }
 
+    /**
+     * Register resources
+     *
+     * @return void
+     */
+    protected function registerResources()
+    {
         $this->mergeConfigFrom(
             __DIR__ . '/./config/multipay.php', 'multipay'
         );
