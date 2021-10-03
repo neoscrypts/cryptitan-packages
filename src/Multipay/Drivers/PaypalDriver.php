@@ -7,8 +7,8 @@ use Illuminate\Support\Collection;
 use LogicException;
 use NeoScrypts\Multipay\Order;
 use NeoScrypts\Multipay\OrderItem;
-use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
@@ -113,7 +113,7 @@ class PaypalDriver extends AbstractDriver
      */
     public function supportsCurrency(string $currency): bool
     {
-        return in_array(strtoupper($currency), self::$supportedCurrencies);
+        return $this->config('enable') && in_array(strtoupper($currency), self::$supportedCurrencies);
     }
 
     /**
