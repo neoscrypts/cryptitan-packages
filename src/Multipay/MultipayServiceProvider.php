@@ -18,16 +18,6 @@ class MultipayServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $this->bootResources();
-    }
-
-    /**
      * Register multipay class
      *
      * @return void
@@ -37,18 +27,6 @@ class MultipayServiceProvider extends ServiceProvider
         $this->app->singleton('multipay', function ($app) {
             return new Multipay($app->config->get('multipay', []));
         });
-    }
-
-    /**
-     * Publish package resources
-     *
-     * @return void
-     */
-    protected function bootResources()
-    {
-        $this->publishes([
-            __DIR__ . '/./config/multipay.php' => config_path('multipay.php'),
-        ]);
     }
 
     /**

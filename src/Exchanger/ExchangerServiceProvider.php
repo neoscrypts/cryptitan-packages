@@ -62,12 +62,8 @@ class ExchangerServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/./config/exchanger.php' => config_path('exchanger.php'),
-            ]);
-
-            $this->publishes([
                 __DIR__ . '/./database/migrations' => database_path('migrations'),
-            ], 'migrations');
+            ], 'exchanger-migrations');
         }
     }
 
