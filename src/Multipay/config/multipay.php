@@ -26,7 +26,7 @@ return [
         'paypal' => [
             'callbackRoute' => 'gateway-callback.paypal',
             'driver'        => \NeoScrypts\Multipay\Drivers\PaypalDriver::class,
-            'enable'        => (bool)env('PAYPAL_ENABLE', false),
+            'enable'        => (bool)env('PAYPAL_ENABLE', true),
             'client_env'    => env('PAYPAL_CLIENT_ENV', 'live'),
             'client_id'     => env('PAYPAL_CLIENT_ID'),
             'client_secret' => env('PAYPAL_CLIENT_SECRET')
