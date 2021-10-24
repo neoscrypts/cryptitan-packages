@@ -25,13 +25,12 @@ class Update extends Command
      */
     protected $description = 'Update exchange rates from an API source';
 
-
     /**
      * Exchanger instance
      *
      * @var Exchanger
      */
-    protected $exchanger;
+    protected Exchanger $exchanger;
 
     /**
      * Create a new command instance.
@@ -39,7 +38,6 @@ class Update extends Command
     public function __construct()
     {
         $this->exchanger = app('exchanger');
-
         parent::__construct();
     }
 
@@ -54,7 +52,7 @@ class Update extends Command
         $baseCurrency = $this->exchanger->config('base_currency');
 
         if (!$this->exchanger->getDriver()->find($baseCurrency)) {
-            return $this->output->error("Failed to update: Base currency does not exist!");
+            throw new Exception("Failed to update: Base currency does not exist!");
         }
 
         switch ($this->exchanger->config('default_service')) {
@@ -79,17 +77,13 @@ class Update extends Command
         $config = $this->getServiceConfig('exchange_rates_api');
 
         if (!$key = Arr::get($config, 'key')) {
-            return $this->output->error("Failed to update: Missing API Key!");
+            throw new Exception("Failed to update: Missing API Key!");
         }
 
-        try {
-            $response = Http::get("https://api.exchangeratesapi.io/v1/latest", [
-                'access_key' => $key,
-                'base'       => $baseCurrency
-            ])->throw();
-        } catch (RequestException $e) {
-            return $this->output->error("Failed to update: " . $e->getMessage());
-        }
+        $response = Http::get("https://api.exchangeratesapi.io/v1/latest", [
+            'access_key' => $key,
+            'base'       => $baseCurrency
+        ])->throw();
 
         $driver = $this->exchanger->getDriver();
 
@@ -114,18 +108,14 @@ class Update extends Command
         $config = $this->getServiceConfig('open_exchange_rates');
 
         if (!$key = Arr::get($config, 'app_id')) {
-            return $this->output->error("Failed to update: Missing APP ID!");
+            throw new Exception("Failed to update: Missing APP ID!");
         }
 
-        try {
-            $response = Http::get("https://openexchangerates.org/api/latest.json", [
-                'app_id'           => $key,
-                'show_alternative' => 1,
-                'base'             => $baseCurrency,
-            ])->throw();
-        } catch (RequestException $e) {
-            return $this->output->error("Failed to update: " . $e->getMessage());
-        }
+        $response = Http::get("https://openexchangerates.org/api/latest.json", [
+            'app_id'           => $key,
+            'show_alternative' => 1,
+            'base'             => $baseCurrency,
+        ])->throw();
 
         $driver = $this->exchanger->getDriver();
 

@@ -3,9 +3,9 @@
 namespace NeoScrypts\Exchanger\Drivers;
 
 use DateTime;
-use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Database\DatabaseManager;
+use UnexpectedValueException;
 
 class Database extends AbstractDriver
 {
@@ -42,7 +42,7 @@ class Database extends AbstractDriver
     public function create(array $params)
     {
         if ($this->find($code = $params['code'])) {
-            throw new Exception("$code already exists!");
+            throw new UnexpectedValueException("$code already exists!");
         }
 
         // Created at stamp

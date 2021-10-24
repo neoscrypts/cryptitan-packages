@@ -3,9 +3,9 @@
 namespace NeoScrypts\Exchanger\Console;
 
 use Akaunting\Money\Currency;
-use Exception;
 use Illuminate\Console\Command;
 use NeoScrypts\Exchanger\Contracts\DriverInterface;
+use UnexpectedValueException;
 
 class Install extends Command
 {
@@ -28,14 +28,14 @@ class Install extends Command
      *
      * @var DriverInterface
      */
-    protected $storage;
+    protected DriverInterface $storage;
 
     /**
      * All installable currencies.
      *
      * @var array
      */
-    protected $currencies;
+    protected array $currencies;
 
     /**
      * Create a new command instance.
@@ -69,8 +69,8 @@ class Install extends Command
             try {
                 $this->storage->create(compact('name', 'code'));
                 $this->output->success("Added: $name");
-            } catch (Exception $e) {
-                $this->output->error("Failed: {$e->getMessage()}");
+            } catch (UnexpectedValueException $e) {
+                $this->output->error($e->getMessage());
             }
         }
     }

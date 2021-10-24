@@ -9,8 +9,6 @@ interface DriverInterface
      * Create a new exchange rate.
      *
      * @param array $params
-     * @throws \Exception
-     *
      * @return void
      */
     public function create(array $params);
@@ -26,7 +24,6 @@ interface DriverInterface
      * Get given exchange rate from storage.
      *
      * @param string $code
-     *
      * @return mixed
      */
     public function find(string $code);
@@ -36,7 +33,6 @@ interface DriverInterface
      *
      * @param string $code
      * @param array    $attributes
-     *
      * @return void
      */
     public function update(string $code, array $attributes);

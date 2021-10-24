@@ -3,9 +3,9 @@
 namespace NeoScrypts\Exchanger\Drivers;
 
 use DateTime;
-use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Arr;
+use UnexpectedValueException;
 
 class Filesystem extends AbstractDriver
 {
@@ -42,7 +42,7 @@ class Filesystem extends AbstractDriver
     public function create(array $params)
     {
         if ($this->find($code = $params['code'])) {
-            throw new Exception("$code already exists!");
+            throw new UnexpectedValueException("$code already exists!");
         }
 
         $exchangeRates = $this->all();
