@@ -5,6 +5,7 @@ namespace NeoScrypts\Exchanger\Drivers;
 use DateTime;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use UnexpectedValueException;
 
 class Filesystem extends AbstractDriver
@@ -33,7 +34,7 @@ class Filesystem extends AbstractDriver
     {
         parent::__construct($baseCurrency, $config);
 
-        $this->filesystem = app('filesystem')->disk($this->config('disk'));
+        $this->filesystem = App::make('filesystem')->disk($this->config('disk'));
     }
 
     /**

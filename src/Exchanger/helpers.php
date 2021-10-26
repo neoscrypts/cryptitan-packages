@@ -2,6 +2,7 @@
 
 use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
+use Illuminate\Support\Facades\App;
 use NeoScrypts\Exchanger\Exchanger;
 
 if (!function_exists('exchanger')) {
@@ -15,10 +16,10 @@ if (!function_exists('exchanger')) {
     function exchanger(Money $money = null, Currency $toCurrency = null)
     {
         if (is_null($money)) {
-            return app('exchanger');
+            return App::make('exchanger');
         }
 
-        return app('exchanger')->convert($money, $toCurrency);
+        return App::make('exchanger')->convert($money, $toCurrency);
     }
 }
 
@@ -35,7 +36,7 @@ if (!function_exists('convertCurrency')) {
     function convertCurrency($amount, string $from, string $to, bool $format = true)
     {
         $money = new Money($amount, new Currency($from), true);
-        $converted = app('exchanger')->convert($money, new Currency($to));
+        $converted = App::make('exchanger')->convert($money, new Currency($to));
         return $format ? $converted->format() : $converted->getValue();
     }
 }

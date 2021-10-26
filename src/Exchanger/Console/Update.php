@@ -4,8 +4,8 @@ namespace NeoScrypts\Exchanger\Console;
 
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use NeoScrypts\Exchanger\Exchanger;
 
@@ -37,7 +37,7 @@ class Update extends Command
      */
     public function __construct()
     {
-        $this->exchanger = app('exchanger');
+        $this->exchanger = App::make('exchanger');
         parent::__construct();
     }
 

@@ -4,6 +4,7 @@ namespace NeoScrypts\Exchanger\Console;
 
 use Akaunting\Money\Currency;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 use NeoScrypts\Exchanger\Contracts\DriverInterface;
 use UnexpectedValueException;
 
@@ -43,7 +44,7 @@ class Install extends Command
     public function __construct()
     {
         $this->currencies = Currency::getCurrencies();
-        $this->storage = app('exchanger')->getDriver();
+        $this->storage = App::make('exchanger')->getDriver();
         parent::__construct();
     }
 

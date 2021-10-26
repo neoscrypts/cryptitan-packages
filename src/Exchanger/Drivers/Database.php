@@ -5,6 +5,7 @@ namespace NeoScrypts\Exchanger\Drivers;
 use DateTime;
 use Illuminate\Support\Arr;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Facades\App;
 use UnexpectedValueException;
 
 class Database extends AbstractDriver
@@ -33,7 +34,7 @@ class Database extends AbstractDriver
     {
         parent::__construct($baseCurrency, $config);
 
-        $this->database = app('db')->connection($this->config('connection'));
+        $this->database = App::make('db')->connection($this->config('connection'));
     }
 
     /**
