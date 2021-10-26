@@ -27,7 +27,7 @@ class InstallerMiddleware
 
         if ($installer->installed()) {
             if (!is_array($installer->details())) {
-                App::abort(401, Lang::get('common.license_invalid'));
+                App::abort(403, Lang::get('common.license_invalid'));
             }
         } else if (!$request->is('installer*')) {
             return Response::redirectTo('installer');
