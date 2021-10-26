@@ -4,6 +4,7 @@ namespace NeoScrypts\Exchanger\Drivers;
 
 use DateTime;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use UnexpectedValueException;
@@ -13,7 +14,7 @@ class Filesystem extends AbstractDriver
     /**
      * Database manager instance.
      *
-     * @var \Illuminate\Contracts\Filesystem\Filesystem
+     * @var FilesystemManager
      */
     protected $filesystem;
 

@@ -3,7 +3,7 @@
 namespace NeoScrypts\Installer;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Carbon;
@@ -15,9 +15,9 @@ class Installer
     /**
      * Filesystem
      *
-     * @var Filesystem
+     * @var FilesystemManager
      */
-    protected Filesystem $filesystem;
+    protected $filesystem;
 
     /**
      * File name
@@ -43,9 +43,9 @@ class Installer
     /**
      * Installer constructor
      *
-     * @param Filesystem $filesystem
+     * @param FilesystemManager $filesystem
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct($filesystem)
     {
         $this->filesystem = $filesystem;
         $this->client = Http::baseUrl('https://license.neoscrypts.com/api/')->acceptJson();
