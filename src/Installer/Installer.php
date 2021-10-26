@@ -67,7 +67,7 @@ class Installer
             return Cache::remember("license.{$code}", $expires, function () use ($code) {
                 return $this->verify($code);
             });
-        });
+        }, null, false);
     }
 
     /**
