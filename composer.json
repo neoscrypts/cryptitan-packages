@@ -5,7 +5,8 @@
     "autoload": {
         "files": [
             "src/Multipay/helpers.php",
-            "src/Exchanger/helpers.php"
+            "src/Exchanger/helpers.php",
+            "src/Installer/helpers.php"
         ],
         "psr-4": {
             "NeoScrypts\\": "src/"
@@ -32,7 +33,8 @@
         "laravel": {
             "providers": [
                 "NeoScrypts\\Multipay\\MultipayServiceProvider",
-                "NeoScrypts\\Exchanger\\ExchangerServiceProvider"
+                "NeoScrypts\\Exchanger\\ExchangerServiceProvider",
+                "NeoScrypts\\Installer\\InstallerServiceProvider"
             ]
         }
     }

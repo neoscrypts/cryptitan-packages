@@ -7,6 +7,7 @@ use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
 use BadMethodCallException;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use LogicException;
@@ -72,6 +73,7 @@ class Order
     {
         $this->uuid = Str::uuid()->toString();
         $this->currency = new Currency($currency);
+
         if (!is_null($totalAmount)) {
             $this->totalAmount = new Money(Validator::validateAmount($totalAmount), $this->currency, true);
         }
@@ -166,7 +168,7 @@ class Order
     /**
      * Collect items
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function collectItems()
     {

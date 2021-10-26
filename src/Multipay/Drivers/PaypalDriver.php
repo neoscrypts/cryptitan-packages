@@ -4,6 +4,7 @@ namespace NeoScrypts\Multipay\Drivers;
 
 use Akaunting\Money\Money;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use LogicException;
 use NeoScrypts\Multipay\Order;
 use NeoScrypts\Multipay\OrderItem;
@@ -13,6 +14,8 @@ use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
+use PayPalHttp\HttpException;
+use PayPalHttp\IOException;
 
 class PaypalDriver extends AbstractDriver
 {
@@ -62,8 +65,8 @@ class PaypalDriver extends AbstractDriver
      * @param Order $order
      * @param callable $callback
      * @return mixed
-     * @throws \PayPalHttp\HttpException
-     * @throws \PayPalHttp\IOException
+     * @throws HttpException
+     * @throws IOException
      */
     public function request(Order $order, $callback)
     {
@@ -86,8 +89,8 @@ class PaypalDriver extends AbstractDriver
      *
      * @param $transactionId
      * @return bool
-     * @throws \PayPalHttp\HttpException
-     * @throws \PayPalHttp\IOException
+     * @throws HttpException
+     * @throws IOException
      */
     public function verify($transactionId)
     {
@@ -174,7 +177,7 @@ class PaypalDriver extends AbstractDriver
         return [
             'intent'              => 'CAPTURE',
             'application_context' => [
-                'brand_name'          => config('app.name'),
+                'brand_name'          => Config::get('app.name'),
                 'user_action'         => 'PAY_NOW',
                 'shipping_preference' => 'NO_SHIPPING',
                 'return_url'          => $this->callbackUrl($order, ['status' => 'success']),

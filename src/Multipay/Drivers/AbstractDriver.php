@@ -3,6 +3,7 @@
 namespace NeoScrypts\Multipay\Drivers;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\URL;
 use NeoScrypts\Multipay\Contracts\DriverInterface;
 use NeoScrypts\Multipay\Order;
 
@@ -51,6 +52,6 @@ abstract class AbstractDriver implements DriverInterface
             'order' => $order->getUuid()
         ], $params);
 
-        return route($this->config('callbackRoute'), $params);
+        return URL::route($this->config('callbackRoute'), $params);
     }
 }

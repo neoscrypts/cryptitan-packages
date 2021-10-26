@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 
 class CreateExchangeRatesTable extends Migration
@@ -17,7 +18,7 @@ class CreateExchangeRatesTable extends Migration
      */
     public function __construct()
     {
-        $this->table_name = config('exchanger.drivers.database.table');
+        $this->table_name = Config::get('exchanger.drivers.database.table');
     }
 
     /**

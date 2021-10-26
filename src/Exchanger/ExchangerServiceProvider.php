@@ -2,6 +2,7 @@
 
 namespace NeoScrypts\Exchanger;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 class ExchangerServiceProvider extends ServiceProvider
@@ -62,7 +63,7 @@ class ExchangerServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/./database/migrations' => database_path('migrations'),
+                __DIR__ . '/./database/migrations' => App::databasePath('migrations'),
             ], 'exchanger-migrations');
         }
     }

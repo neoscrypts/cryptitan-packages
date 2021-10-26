@@ -1,5 +1,8 @@
 <?php
 
+use NeoScrypts\Exchanger\Drivers\Database;
+use NeoScrypts\Exchanger\Drivers\Filesystem;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -62,13 +65,13 @@ return [
 
     'drivers' => [
         'database' => [
-            'class'      => \NeoScrypts\Exchanger\Drivers\Database::class,
+            'class'      => Database::class,
             'connection' => null,
             'table'      => 'exchange_rates',
         ],
 
         'filesystem' => [
-            'class' => \NeoScrypts\Exchanger\Drivers\Filesystem::class,
+            'class' => Filesystem::class,
             'disk'  => null,
             'path'  => 'exchange_rates.json',
         ],
