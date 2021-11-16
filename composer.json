@@ -1,6 +1,6 @@
 {
-    "name": "neoscrypts/cryptonite",
-    "description": "Cryptonite packages",
+    "name": "neoscrypts/cryptitan",
+    "description": "Cryptitan Packages",
     "type": "library",
     "autoload": {
         "files": [

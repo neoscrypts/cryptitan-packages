@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\View;
 class IndexController extends Controller
 {
     /**
-     * Cryptonite Settings
+     * Cryptitan Settings
      *
      * @var mixed
      */
