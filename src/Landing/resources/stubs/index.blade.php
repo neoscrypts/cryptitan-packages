@@ -5,7 +5,9 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-    <title>{{$data['name']}}</title>
+    <title>{{data_get($data, 'name')}}</title>
+
+    <script src="//polyfill.io/v3/polyfill.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
         window.__APP__ = @json($data);
