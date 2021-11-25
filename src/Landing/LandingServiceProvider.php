@@ -49,7 +49,7 @@ class LandingServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         if (View::exists('landing::index')) {
-            Route::middleware('web')->group(function () {
+            Route::middleware(['web', 'guest'])->group(function () {
                 Route::get('/landing/{any?}', [IndexController::class, 'view'])->where('any', '.*');
                 Route::get('/', [IndexController::class, 'view'])->name('landing');
             });
