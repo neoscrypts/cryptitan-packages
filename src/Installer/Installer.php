@@ -31,7 +31,7 @@ class Installer
      *
      * @var string
      */
-    protected string $item = '';
+    protected string $item = '34496505';
 
     /**
      * License server
