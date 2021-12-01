@@ -28,7 +28,7 @@ class InstallerMiddleware
             try {
                 $installer->details();
             } catch (RequestException $e) {
-                $message = $e->response->json()['message'];
+                $message = $e->response->json('message');
                 App::abort(403, $message);
             }
         } else if (!$request->is('installer*')) {
