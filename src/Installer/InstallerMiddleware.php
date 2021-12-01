@@ -19,15 +19,17 @@ class InstallerMiddleware
      * @param Closure $next
      * @return mixed
      * @throws FileNotFoundException
-     * @throws RequestException
      */
     public function handle(Request $request, Closure $next)
     {
         $installer = $this->getInstaller();
 
         if ($installer->installed()) {
-            if (!is_array($installer->details())) {
-                App::abort(403, Lang::get('common.license_invalid'));
+            try {
+                $installer->details();
+            } catch (RequestException $e) {
+                $message = $e->response->json()['message'];
+                App::abort(403, $message);
             }
         } else if (!$request->is('installer*')) {
             return Response::redirectTo('installer');

@@ -56,18 +56,15 @@ class Installer
      *
      * @return array|null
      * @throws FileNotFoundException
-     * @throws RequestException
      */
     public function details(): ?array
     {
-        return rescue(function () {
-            $expires = Carbon::now()->addDay();
-            $code = $this->load();
+        $expires = Carbon::now()->addDay();
+        $code = $this->load();
 
-            return Cache::remember("license.{$code}", $expires, function () use ($code) {
-                return $this->verify($code);
-            });
-        }, null, false);
+        return Cache::remember("license.{$code}", $expires, function () use ($code) {
+            return $this->verify($code);
+        });
     }
 
     /**
