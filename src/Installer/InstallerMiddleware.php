@@ -26,10 +26,11 @@ class InstallerMiddleware
 
         if ($installer->installed()) {
             try {
-                $installer->details();
+                if (!is_array($installer->details())) {
+                    App::abort(403, Lang::get('common.license_invalid'));
+                }
             } catch (RequestException $e) {
-                $message = $e->response->json('message');
-                App::abort(403, $message);
+                App::abort(403, $e->response->json('message'));
             }
         } else if (!$request->is('installer*')) {
             return Response::redirectTo('installer');
