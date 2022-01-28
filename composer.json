@@ -27,15 +27,9 @@
         "illuminate/database" : "^8.0",
         "illuminate/http" : "^8.0",
         "illuminate/routing" : "^8.0",
-        "akaunting/laravel-money": "dev-cryptitan",
+        "akaunting/laravel-money": "^1.2",
         "paypal/paypal-checkout-sdk": "^1.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/neoscrypts/laravel-money"
-        }
-    ],
     "extra": {
         "laravel": {
             "providers": [
