@@ -31,12 +31,13 @@ if (!function_exists('convertCurrency')) {
      * @param string $from
      * @param string $to
      * @param bool $format
+     * @param int|null $precision
      * @return float|string
      */
-    function convertCurrency($amount, string $from, string $to, bool $format = true)
+    function convertCurrency($amount, string $from, string $to, bool $format = true, int $precision = null)
     {
-        $money = new Money($amount, new Currency($from), true);
-        $converted = App::make('exchanger')->convert($money, new Currency($to));
+        $money = money($amount, $from, true, $precision);
+        $converted = App::make('exchanger')->convert($money, currency($to, $precision));
         return $format ? $converted->format() : $converted->getValue();
     }
 }
@@ -47,11 +48,11 @@ if (!function_exists('formatCurrency')) {
      *
      * @param $amount
      * @param string $currency
+     * @param int|null $precision
      * @return string
      */
-    function formatCurrency($amount, string $currency)
+    function formatCurrency($amount, string $currency, int $precision = null)
     {
-        $money = new Money($amount, new Currency($currency), true);
-        return $money->format();
+        return money($amount, $currency, true, $precision)->format();
     }
 }
