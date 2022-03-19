@@ -26,9 +26,9 @@ return [
 
     'gateways' => [
         'paypal' => [
-            'callbackRoute' => 'gateway-callback.paypal',
             'driver'        => PaypalDriver::class,
             'enable'        => (bool) env('PAYPAL_ENABLE', true),
+            'callback'      => 'gateway-callback.paypal',
             'client_env'    => env('PAYPAL_CLIENT_ENV', 'live'),
             'client_id'     => env('PAYPAL_CLIENT_ID'),
             'client_secret' => env('PAYPAL_CLIENT_SECRET')

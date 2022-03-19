@@ -19,6 +19,8 @@ use PayPalHttp\IOException;
 
 class PaypalDriver extends AbstractDriver
 {
+    const DRIVER_NAME = "PayPal";
+
     /**
      * Paypal client
      *
@@ -32,9 +34,18 @@ class PaypalDriver extends AbstractDriver
      * @var string[]
      */
     protected static array $supportedCurrencies = [
-        'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF',
-        'ILS', 'JPY', 'MYR', 'MXN', 'TWD', 'NZD', 'NOK', 'PHP', 'PLN',
-        'GBP', 'RUB', 'SGD', 'SEK', 'CHF', 'THB', 'USD'
+        'AUD', 'BRL',
+        'CAD', 'CNY',
+        'DKK', 'EUR',
+        'HUF', 'ILS',
+        'JPY', 'MYR',
+        'MXN', 'TWD',
+        'NZD', 'NOK',
+        'PHP', 'PLN',
+        'GBP', 'RUB',
+        'SGD', 'SEK',
+        'CHF', 'THB',
+        'USD', 'HKD',
     ];
 
     /**
@@ -57,6 +68,14 @@ class PaypalDriver extends AbstractDriver
         }
 
         $this->client = new PayPalHttpClient($env);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
+    {
+        return static::DRIVER_NAME;
     }
 
     /**

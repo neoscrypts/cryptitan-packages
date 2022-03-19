@@ -48,10 +48,8 @@ abstract class AbstractDriver implements DriverInterface
      */
     protected function callbackUrl(Order $order, array $params = [])
     {
-        $params = array_merge([
-            'order' => $order->getUuid()
-        ], $params);
+        $params = array_merge(['order' => $order->getUuid()], $params);
 
-        return URL::route($this->config('callbackRoute'), $params);
+        return URL::route($this->config('callback'), $params);
     }
 }

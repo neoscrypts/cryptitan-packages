@@ -7,6 +7,13 @@ use NeoScrypts\Multipay\Order;
 interface DriverInterface
 {
     /**
+     * Get driver name
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
      * Create new purchase
      *
      * @param Order $order
