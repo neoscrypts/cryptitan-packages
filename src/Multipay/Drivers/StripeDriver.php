@@ -72,7 +72,7 @@ class StripeDriver extends AbstractDriver
     {
         parent::__construct($config);
 
-        $this->stripeClient = new StripeClient($this->config('client_secret'));
+        $this->stripeClient = new StripeClient((string) $this->config('client_secret'));
     }
 
     /**
