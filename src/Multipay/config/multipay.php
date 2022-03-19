@@ -35,10 +35,9 @@ return [
         ],
 
         'stripe' => [
-            'driver'        => StripeDriver::class,
-            'enable'        => (bool) env('STRIPE_ENABLE', false),
-            'client_key'    => env('STRIPE_KEY'),
-            'client_secret' => env('STRIPE_SECRET'),
+            'driver'     => StripeDriver::class,
+            'enable'     => (bool) env('STRIPE_ENABLE', false),
+            'client_key' => env('STRIPE_KEY'),
         ]
     ]
 ];
