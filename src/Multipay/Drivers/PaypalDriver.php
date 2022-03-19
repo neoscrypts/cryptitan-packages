@@ -58,13 +58,10 @@ class PaypalDriver extends AbstractDriver
         parent::__construct($config);
 
         if ($config['client_env'] === 'live') {
-            $env = new ProductionEnvironment(
-                $config['client_id'], $config['client_secret']
+            $env = new ProductionEnvironment($config['client_id'], $config['client_secret']
             );
         } else {
-            $env = new SandboxEnvironment(
-                $config['client_id'], $config['client_secret']
-            );
+            $env = new SandboxEnvironment($config['client_id'], $config['client_secret']);
         }
 
         $this->client = new PayPalHttpClient($env);
@@ -90,7 +87,7 @@ class PaypalDriver extends AbstractDriver
     public function request(Order $order, $callback)
     {
         $request = new OrdersCreateRequest();
-        $request->body = $this->buildRequestBody($order);
+        $request->body = $this->buildRequest($order);
         $response = $this->client->execute($request);
         $result = $this->parseResult($response->result);
 
@@ -144,7 +141,7 @@ class PaypalDriver extends AbstractDriver
      * @param Order $order
      * @return array
      */
-    protected function buildRequestBody(Order $order)
+    protected function buildRequest(Order $order)
     {
         $paymentUnit = [
             'amount'    => $this->getMoneyObject($order->getTotalAmount()),
@@ -152,9 +149,7 @@ class PaypalDriver extends AbstractDriver
         ];
 
         if (!$order->isFixed()) {
-            $breakdown = [
-                'item_total' => $this->getMoneyObject($order->getSubTotal()),
-            ];
+            $breakdown = ['item_total' => $this->getMoneyObject($order->getSubTotal())];
 
             if (($tax = $order->getTotalTax()) && !$tax->isZero()) {
                 $breakdown['tax_total'] = $this->getMoneyObject($tax);

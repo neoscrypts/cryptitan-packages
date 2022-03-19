@@ -50,6 +50,6 @@ abstract class AbstractDriver implements DriverInterface
     {
         $params = array_merge(['order' => $order->getUuid()], $params);
 
-        return URL::route($this->config('callback'), $params);
+        return URL::route("gateway.callback", $params);
     }
 }
