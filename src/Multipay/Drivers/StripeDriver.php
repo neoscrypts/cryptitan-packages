@@ -89,7 +89,7 @@ class StripeDriver extends AbstractDriver
 
         return $session->payment_status === "paid";
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -115,6 +115,7 @@ class StripeDriver extends AbstractDriver
                     'currency'     => strtolower($amount->getCurrency()->getCurrency()),
                     'unit_amount'  => $amount->getAmount(),
                 ],
+                'quantity'   => 1
             ]],
             'success_url' => $this->callbackUrl($order, ['status' => 'success']),
             'cancel_url'  => $this->callbackUrl($order, ['status' => 'cancel']),
