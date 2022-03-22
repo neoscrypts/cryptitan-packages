@@ -90,7 +90,7 @@ class StripeDriver extends AbstractDriver
      */
     public function supportsCurrency(string $currency): bool
     {
-        return $this->config('enable') && in_array(strtoupper($currency), self::$supportedCurrencies);
+        return in_array(strtoupper($currency), self::$supportedCurrencies);
     }
 
     /**
