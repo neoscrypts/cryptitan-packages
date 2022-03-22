@@ -17,19 +17,6 @@ class PayUDriver extends AbstractDriver
     const DRIVER_NAME = "PayU";
 
     /**
-     * Supported currency codes
-     *
-     * @var string[]
-     */
-    protected static $supportedCurrencies = [
-        "USD", "CHF",
-        "RON", "PLN",
-        "NOK", "HRK",
-        "GBP", "EUR",
-        "DKK", "CZK"
-    ];
-
-    /**
      * Initialize PayU instance
      *
      * @param array $config
@@ -80,7 +67,7 @@ class PayUDriver extends AbstractDriver
      */
     public function supportsCurrency(string $currency): bool
     {
-        return in_array(strtoupper($currency), self::$supportedCurrencies);
+        return strtoupper($currency) === strtoupper($this->config('currency'));
     }
 
     /**

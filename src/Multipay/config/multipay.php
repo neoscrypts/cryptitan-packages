@@ -44,6 +44,7 @@ return [
         'payu' => [
             'driver'        => PayUDriver::class,
             'enable'        => (bool) env('PAYU_ENABLE', false),
+            'currency'      => env('PAYU_CURRENCY', 'PLN'),
             'client_env'    => env('PAYU_CLIENT_ENV', 'secure'),
             'client_id'     => env('PAYU_CLIENT_ID'),
             'client_secret' => env('PAYU_CLIENT_SECRET'),
