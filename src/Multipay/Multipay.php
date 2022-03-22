@@ -3,6 +3,7 @@
 namespace NeoScrypts\Multipay;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class Multipay
 {
@@ -21,6 +22,16 @@ class Multipay
     public function __construct(array $config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * List available gateways
+     *
+     * @return Collection
+     */
+    public function available()
+    {
+        return collect($this->config['gateways'])->filter(fn($c) => $c['enable'])->keys();
     }
 
     /**
