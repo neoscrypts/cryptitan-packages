@@ -1,6 +1,7 @@
 <?php
 
 use NeoScrypts\Multipay\Drivers\PaypalDriver;
+use NeoScrypts\Multipay\Drivers\PayUDriver;
 use NeoScrypts\Multipay\Drivers\StripeDriver;
 
 return [
@@ -38,6 +39,14 @@ return [
             'driver'     => StripeDriver::class,
             'enable'     => (bool) env('STRIPE_ENABLE', false),
             'client_key' => env('STRIPE_KEY'),
-        ]
+        ],
+
+        'payu' => [
+            'driver'        => PayUDriver::class,
+            'enable'        => (bool) env('PAYU_ENABLE', false),
+            'client_env'    => env('PAYU_CLIENT_ENV', 'secure'),
+            'client_id'     => env('PAYU_CLIENT_ID'),
+            'client_secret' => env('PAYU_CLIENT_SECRET'),
+        ],
     ]
 ];
