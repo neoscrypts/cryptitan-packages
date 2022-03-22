@@ -14,6 +14,11 @@ class StripeDriver extends AbstractDriver
     const DRIVER_NAME = "Stripe";
 
     /**
+     * @var StripeClient
+     */
+    protected $client;
+
+    /**
      * Supported currency codes
      *
      * @var string[]
@@ -62,6 +67,18 @@ class StripeDriver extends AbstractDriver
     ];
 
     /**
+     * Initialize Stripe instance
+     *
+     * @param array $config
+     */
+    public function __construct(array $config = [])
+    {
+        parent::__construct($config);
+
+        $this->client = new StripeClient($this->config('client_key'));
+    }
+
+    /**
      * @inheritDoc
      * @throws ApiErrorException
      */
@@ -69,7 +86,7 @@ class StripeDriver extends AbstractDriver
     {
         $request = $this->buildRequest($order);
 
-        $session = $this->getClient()->checkout->sessions->create($request);
+        $session = $this->client->checkout->sessions->create($request);
 
         return $callback($session->id, $session->url);
     }
@@ -80,7 +97,7 @@ class StripeDriver extends AbstractDriver
      */
     public function verify($transactionId)
     {
-        $session = $this->getClient()->checkout->sessions->retrieve($transactionId);
+        $session = $this->client->checkout->sessions->retrieve($transactionId);
 
         return $session->payment_status === "paid";
     }
@@ -131,15 +148,5 @@ class StripeDriver extends AbstractDriver
             'cancel_url'  => $this->callbackUrl($order, ['status' => 'cancel']),
             'mode'        => 'payment',
         ];
-    }
-
-    /**
-     * Get stripe client
-     *
-     * @return StripeClient
-     */
-    protected function getClient()
-    {
-        return new StripeClient($this->config('client_key'));
     }
 }
