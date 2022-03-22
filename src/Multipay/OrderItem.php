@@ -36,13 +36,6 @@ class OrderItem
     protected Money $unitPrice;
 
     /**
-     * Item unit tax
-     *
-     * @var Money
-     */
-    protected Money $unitTax;
-
-    /**
      * Item quantity
      *
      * @var int
@@ -56,9 +49,9 @@ class OrderItem
      */
     public function __construct(string $name, string $currency, $unitPrice)
     {
-        $this->currency = new Currency($currency);
-        $this->unitPrice = new Money(Validator::validateAmount($unitPrice), $this->currency, true);
         $this->name = $name;
+        $this->unitPrice = new Money(Validator::validateAmount($unitPrice), new Currency($currency), true);
+        $this->currency = $this->unitPrice->getCurrency();
     }
 
     /**
@@ -129,37 +122,5 @@ class OrderItem
     {
         $this->quantity = abs($quantity);
         return $this;
-    }
-
-    /**
-     * Set unit tax
-     *
-     * @param string|float $unitTax
-     * @return $this
-     */
-    public function setUnitTax($unitTax)
-    {
-        $this->unitTax = new Money(Validator::validateAmount($unitTax), $this->currency, true);
-        return $this;
-    }
-
-    /**
-     * @return Money
-     */
-    public function getUnitTax(): Money
-    {
-        return $this->unitTax;
-    }
-
-    /**
-     * UnitTax * quantity
-     *
-     * @return Money
-     */
-    public function getTax(): Money
-    {
-        return $this->unitTax ?
-            $this->unitTax->multiply($this->quantity) :
-            $this->unitTax;
     }
 }
