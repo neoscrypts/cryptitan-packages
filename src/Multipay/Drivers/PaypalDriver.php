@@ -68,14 +68,6 @@ class PaypalDriver extends AbstractDriver
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getName(): string
-    {
-        return static::DRIVER_NAME;
-    }
-
-    /**
      * Request payment
      *
      * @param Order $order
@@ -149,43 +141,17 @@ class PaypalDriver extends AbstractDriver
         ];
 
         if (!$order->isFixed()) {
-            $breakdown = ['item_total' => $this->getMoneyObject($order->getSubTotal())];
+            $paymentUnit['items'] = (array) $order->collectItems()->map(function (OrderItem $item) {
+                return [
+                    'name'        => $item->getName(),
+                    'unit_amount' => $this->getMoneyObject($item->getUnitPrice()),
+                    'quantity'    => $item->getQuantity(),
+                ];
+            });
 
-            if (($tax = $order->getTotalTax()) && !$tax->isZero()) {
-                $breakdown['tax_total'] = $this->getMoneyObject($tax);
-            }
-
-            if ($shipping = $order->getShipping()) {
-                $breakdown['shipping'] = $this->getMoneyObject($shipping);
-            }
-
-            if ($handling = $order->getHandling()) {
-                $breakdown['handling'] = $this->getMoneyObject($handling);
-            }
-
-            if ($discount = $order->getDiscount()) {
-                $breakdown['discount'] = $this->getMoneyObject($discount);
-            }
-
-            $paymentUnit['amount']['breakdown'] = $breakdown;
-
-            $paymentUnit['items'] = $order->collectItems()
-                ->map(function (OrderItem $item) {
-                    $body = [
-                        'name'        => $item->getName(),
-                        'unit_amount' => $this->getMoneyObject($item->getUnitPrice()),
-                        'quantity'    => $item->getQuantity(),
-                    ];
-
-                    if ($description = $item->getDescription()) {
-                        $body['description'] = $description;
-                    }
-
-                    if ($tax = $item->getUnitTax()) {
-                        $body['tax'] = $this->getMoneyObject($tax);
-                    }
-                    return $body;
-                })->toArray();
+            $paymentUnit['amount']['breakdown'] = [
+                'item_total' => $this->getMoneyObject($order->getSubTotal())
+            ];
         }
 
         return [

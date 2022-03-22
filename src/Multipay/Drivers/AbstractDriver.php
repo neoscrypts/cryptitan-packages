@@ -40,6 +40,14 @@ abstract class AbstractDriver implements DriverInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getName(): string
+    {
+        return static::DRIVER_NAME;
+    }
+
+    /**
      * Get callback url
      *
      * @param Order $order
