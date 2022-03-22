@@ -2,7 +2,10 @@
 
 namespace NeoScrypts\Multipay\Drivers;
 
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use NeoScrypts\Multipay\Order;
+use NeoScrypts\Multipay\OrderItem;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 
@@ -60,14 +63,6 @@ class StripeDriver extends AbstractDriver
 
     /**
      * @inheritDoc
-     */
-    public function getName(): string
-    {
-        return static::DRIVER_NAME;
-    }
-
-    /**
-     * @inheritDoc
      * @throws ApiErrorException
      */
     public function request(Order $order, $callback)
@@ -106,17 +101,32 @@ class StripeDriver extends AbstractDriver
      */
     protected function buildRequest(Order $order)
     {
-        $amount = $order->getTotalAmount();
+        $items = new Collection();
 
-        return [
-            'line_items'  => [[
+        if ($order->isFixed()) {
+            $items->add([
                 'price_data' => [
-                    'product_data' => ['name' => 'Payment'],
-                    'currency'     => strtolower($amount->getCurrency()->getCurrency()),
-                    'unit_amount'  => $amount->getAmount(),
+                    'product_data' => ['name' => Config::get('app.name')],
+                    'currency'     => strtolower($order->getCurrency()->getCurrency()),
+                    'unit_amount'  => $order->getTotalAmount()->getAmount(),
                 ],
                 'quantity'   => 1
-            ]],
+            ]);
+        } else {
+            $order->collectItems()->each(function (OrderItem $item) use ($items, $order){
+                $items->add([
+                    'price_data' => [
+                        'product_data' => ['name' => $item->getName()],
+                        'currency'     => strtolower($item->getCurrency()->getCurrency()),
+                        'unit_amount'  => $item->getUnitPrice()->getAmount(),
+                    ],
+                    'quantity'   => $item->getQuantity()
+                ]);
+            });
+        }
+
+        return [
+            'line_items'  => $items->toArray(),
             'success_url' => $this->callbackUrl($order, ['status' => 'success']),
             'cancel_url'  => $this->callbackUrl($order, ['status' => 'cancel']),
             'mode'        => 'payment',
