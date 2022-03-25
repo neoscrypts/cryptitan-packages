@@ -31,7 +31,8 @@
         "paypal/paypal-checkout-sdk": "^1.0",
         "stripe/stripe-php": "^7.94",
         "openpayu/openpayu" : "2.3.*",
-        "mollie/mollie-api-php": "^2.0"
+        "mollie/mollie-api-php": "^2.0",
+        "midtrans/midtrans-php": "2.*"
     },
     "repositories": [
         {

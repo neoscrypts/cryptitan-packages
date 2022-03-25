@@ -3,7 +3,6 @@
 namespace NeoScrypts\Multipay\Drivers;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 use NeoScrypts\Multipay\Order;
 use NeoScrypts\Multipay\OrderItem;
 use Stripe\Exception\ApiErrorException;
