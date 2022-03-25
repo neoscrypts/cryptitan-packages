@@ -2,6 +2,7 @@
 
 namespace NeoScrypts\Multipay\Drivers;
 
+use Akaunting\Money\Money;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\MollieApiClient;
 use NeoScrypts\Multipay\Order;
@@ -89,13 +90,24 @@ class MollieDriver extends AbstractDriver
     protected function buildRequest(Order $order)
     {
         return [
-            "amount"      => [
-                "value"    => (string) $order->getTotalAmount()->getValue(),
-                "currency" => $order->getCurrency()->getCurrency(),
-            ],
+            "amount"      => $this->formatAmount($order->getTotalAmount()),
             "description" => "Order #" . $order->getUuid(),
             "redirectUrl" => $this->callbackUrl($order, ['status' => 'success']),
             "metadata"    => ["order" => $order->getUuid()],
+        ];
+    }
+
+    /**
+     * Format amount
+     *
+     * @param Money $money
+     * @return array
+     */
+    protected function formatAmount(Money $money)
+    {
+        return [
+            "currency" => $money->getCurrency()->getCurrency(),
+            "value"    => sprintf("%.2F", $money->getValue()),
         ];
     }
 }
