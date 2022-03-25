@@ -90,8 +90,8 @@ class MollieDriver extends AbstractDriver
     {
         return [
             "amount"      => [
+                "value"    => (string) $order->getTotalAmount()->getValue(),
                 "currency" => $order->getCurrency()->getCurrency(),
-                "value"    => $order->getTotalAmount()->getValue()
             ],
             "description" => "Order #" . $order->getUuid(),
             "redirectUrl" => $this->callbackUrl($order, ['status' => 'success']),
