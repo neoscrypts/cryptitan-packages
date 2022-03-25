@@ -1,6 +1,5 @@
 <?php
 
-use NeoScrypts\Multipay\Drivers\MidtransDriver;
 use NeoScrypts\Multipay\Drivers\MollieDriver;
 use NeoScrypts\Multipay\Drivers\PaypalDriver;
 use NeoScrypts\Multipay\Drivers\PayUDriver;
@@ -52,17 +51,10 @@ return [
         'payu' => [
             'driver'        => PayUDriver::class,
             'enable'        => (bool) env('PAYU_ENABLE', false),
+            'currency'      => env('PAYU_CURRENCY', 'PLN'),
             'client_env'    => env('PAYU_CLIENT_ENV', 'secure'),
             'client_id'     => env('PAYU_CLIENT_ID'),
             'client_secret' => env('PAYU_CLIENT_SECRET'),
-            'currency'      => env('PAYU_CURRENCY', 'PLN'),
-        ],
-
-        'midtrans' => [
-            'driver'     => MidtransDriver::class,
-            'enable'     => (bool) env('MIDTRANS_ENABLE', false),
-            'production' => (bool) env('MIDTRANS_PRODUCTION', true),
-            'server_key' => env('MIDTRANS_SERVER_KEY'),
         ],
     ]
 ];
