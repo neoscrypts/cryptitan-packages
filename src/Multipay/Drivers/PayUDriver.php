@@ -82,7 +82,7 @@ class PayUDriver extends AbstractDriver
 
         if ($order->isFixed()) {
             $products->add([
-                'name'      => 'Credit',
+                'name'      => $order->getUuid(),
                 'unitPrice' => $order->getTotalAmount()->getAmount(),
                 'quantity'  => 1
             ]);
@@ -100,7 +100,7 @@ class PayUDriver extends AbstractDriver
             'extOrderId'    => $order->getUuid(),
             'merchantPosId' => OpenPayU_Configuration::getOauthClientId(),
             'customerIp'    => Request::ip(),
-            'description'   => Config::get('app.name'),
+            'description'   => "Order #" . $order->getUuid(),
             'continueUrl'   => $this->callbackUrl($order, ['status' => 'success']),
             'totalAmount'   => $order->getTotalAmount()->getAmount(),
             'currencyCode'  => $order->getCurrency()->getCurrency(),

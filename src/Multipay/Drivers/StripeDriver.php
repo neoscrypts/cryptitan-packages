@@ -123,7 +123,7 @@ class StripeDriver extends AbstractDriver
         if ($order->isFixed()) {
             $items->add([
                 'price_data' => [
-                    'product_data' => ['name' => Config::get('app.name')],
+                    'product_data' => ['name' => "Order #" . $order->getUuid()],
                     'currency'     => strtolower($order->getCurrency()->getCurrency()),
                     'unit_amount'  => $order->getTotalAmount()->getAmount(),
                 ],

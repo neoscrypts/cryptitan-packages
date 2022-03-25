@@ -1,5 +1,6 @@
 <?php
 
+use NeoScrypts\Multipay\Drivers\MollieDriver;
 use NeoScrypts\Multipay\Drivers\PaypalDriver;
 use NeoScrypts\Multipay\Drivers\PayUDriver;
 use NeoScrypts\Multipay\Drivers\StripeDriver;
@@ -39,6 +40,12 @@ return [
             'driver'     => StripeDriver::class,
             'enable'     => (bool) env('STRIPE_ENABLE', false),
             'client_key' => env('STRIPE_KEY'),
+        ],
+
+        'mollie' => [
+            'driver'     => MollieDriver::class,
+            'enable'     => (bool) env('MOLLIE_ENABLE', false),
+            'client_key' => env('MOLLIE_CLIENT_KEY')
         ],
 
         'payu' => [

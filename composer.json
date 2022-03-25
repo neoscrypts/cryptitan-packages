@@ -30,7 +30,8 @@
         "akaunting/laravel-money": "dev-cryptitan",
         "paypal/paypal-checkout-sdk": "^1.0",
         "stripe/stripe-php": "^7.94",
-        "openpayu/openpayu" : "2.3.*"
+        "openpayu/openpayu" : "2.3.*",
+        "mollie/mollie-api-php": "^2.0"
     },
     "repositories": [
         {
