@@ -2,6 +2,7 @@
 
 use NeoScrypts\Multipay\Drivers\MollieDriver;
 use NeoScrypts\Multipay\Drivers\PaypalDriver;
+use NeoScrypts\Multipay\Drivers\PaystackDriver;
 use NeoScrypts\Multipay\Drivers\PayUDriver;
 use NeoScrypts\Multipay\Drivers\StripeDriver;
 
@@ -46,6 +47,12 @@ return [
             'driver'     => MollieDriver::class,
             'enable'     => (bool) env('MOLLIE_ENABLE', false),
             'client_key' => env('MOLLIE_CLIENT_KEY')
+        ],
+
+        'paystack' => [
+            'driver'        => PaystackDriver::class,
+            'enable'        => (bool) env('PAYSTACK_ENABLE', false),
+            'client_secret' => env('PAYSTACK_CLIENT_SECRET')
         ],
 
         'payu' => [
