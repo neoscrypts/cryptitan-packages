@@ -32,7 +32,7 @@ class InstallerMiddleware
             } catch (RequestException $e) {
                 App::abort(403, $e->response->json('message'));
             }
-        } else if (!$request->is('installer*')) {
+        } else if (!$request->is('installer*', 'locale*')) {
             return Response::redirectTo('installer');
         }
 
