@@ -3,8 +3,8 @@
 namespace NeoScrypts\Exchanger;
 
 use Akaunting\Money\Currency;
-use Illuminate\Support\Arr;
 use Akaunting\Money\Money;
+use Illuminate\Support\Arr;
 use NeoScrypts\Exchanger\Drivers\AbstractDriver;
 use OutOfBoundsException;
 use UnexpectedValueException;
@@ -32,7 +32,7 @@ class Exchanger
      */
     public function __construct(array $config)
     {
-        $this->config = tap($config, function ($config){
+        $this->config = tap($config, function ($config) {
             $baseCurrency = Arr::get($config, 'base_currency');
             $driverName = Arr::get($config, 'default');
             $driverConfig = Arr::get($config, "drivers.$driverName", []);
@@ -51,15 +51,15 @@ class Exchanger
      */
     public function convert(Money $money, Currency $toCurrency)
     {
-        $baseCurrency = $money->getCurrency();
+        $conversion = new Money($money->getAmount(), $money->getCurrency());
 
-        if ($baseCurrency->equals($toCurrency)) {
-            return $money;
-        }
+        $currency = $conversion->getCurrency();
 
-        $ratio = $this->getExchangeRate($toCurrency) / $this->getExchangeRate($baseCurrency);
+        if ($currency->equals($toCurrency)) return $conversion;
 
-        return $money->convert($toCurrency, $ratio);
+        $ratio = $this->getExchangeRate($toCurrency) / $this->getExchangeRate($currency);
+
+        return $conversion->convert($toCurrency, $ratio);
     }
 
 
