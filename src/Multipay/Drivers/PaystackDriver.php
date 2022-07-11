@@ -10,7 +10,12 @@ use NeoScrypts\Multipay\Order;
 
 class PaystackDriver extends AbstractDriver
 {
-    const DRIVER_NAME = "Paystack";
+    /**
+     * Driver name
+     *
+     * @var string
+     */
+    protected $name = "Paystack";
 
     /**
      * @var PendingRequest

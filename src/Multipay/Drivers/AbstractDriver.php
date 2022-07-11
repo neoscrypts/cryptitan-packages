@@ -10,6 +10,13 @@ use NeoScrypts\Multipay\Order;
 abstract class AbstractDriver implements DriverInterface
 {
     /**
+     * Driver name
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
      * Driver config
      *
      * @var array
@@ -42,9 +49,17 @@ abstract class AbstractDriver implements DriverInterface
     /**
      * @inheritDoc
      */
-    public function getName(): string
+    public function getName()
     {
-        return static::DRIVER_NAME;
+        return $this->name;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**

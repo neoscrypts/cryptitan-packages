@@ -19,7 +19,12 @@ use PayPalHttp\IOException;
 
 class PaypalDriver extends AbstractDriver
 {
-    const DRIVER_NAME = "PayPal";
+    /**
+     * Driver name
+     *
+     * @var string
+     */
+    protected $name = "PayPal";
 
     /**
      * Paypal client

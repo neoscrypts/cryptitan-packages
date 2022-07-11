@@ -9,7 +9,12 @@ use NeoScrypts\Multipay\Order;
 
 class MollieDriver extends AbstractDriver
 {
-    const DRIVER_NAME = "Mollie";
+    /**
+     * Driver name
+     *
+     * @var string
+     */
+    protected $name = "Mollie";
 
     /**
      * @var MollieApiClient

@@ -11,7 +11,15 @@ interface DriverInterface
      *
      * @return string
      */
-    public function getName(): string;
+    public function getName();
+
+    /**
+     * Set driver name
+     *
+     * @param $name
+     * @return void
+     */
+    public function setName($name);
 
     /**
      * Create new purchase

@@ -14,7 +14,12 @@ use OpenPayU_Order;
 
 class PayUDriver extends AbstractDriver
 {
-    const DRIVER_NAME = "PayU";
+    /**
+     * Driver name
+     *
+     * @var string
+     */
+    protected $name = "PayU";
 
     /**
      * Initialize PayU instance
