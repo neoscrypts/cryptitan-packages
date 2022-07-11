@@ -7,6 +7,7 @@ use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
 use BadMethodCallException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 
@@ -39,6 +40,20 @@ class Order
      * @var string
      */
     protected string $uuid;
+
+    /**
+     * Order description
+     *
+     * @var string
+     */
+    protected string $description;
+
+    /**
+     * User's email
+     *
+     * @var string
+     */
+    protected string $email;
 
     /**
      * Initialize with currency.
@@ -150,5 +165,47 @@ class Order
     public function isFixed()
     {
         return isset($this->totalAmount);
+    }
+
+    /**
+     * Set description
+     *
+     * @param $description
+     * @return void
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description ?: "Order #" . $this->getUuid();
+    }
+
+    /**
+     * Set user's email
+     *
+     * @param $email
+     * @return void
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * Get user's email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email ?: Auth::user()?->email;
     }
 }
