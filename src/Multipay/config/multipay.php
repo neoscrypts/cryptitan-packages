@@ -1,5 +1,6 @@
 <?php
 
+use NeoScrypts\Multipay\Drivers\CinetPayDriver;
 use NeoScrypts\Multipay\Drivers\MollieDriver;
 use NeoScrypts\Multipay\Drivers\PaypalDriver;
 use NeoScrypts\Multipay\Drivers\PaystackDriver;
@@ -72,6 +73,13 @@ return [
             'client_env' => env('UNLIMINT_CLIENT_ENV', 'production'),
             'terminal'   => env('UNLIMINT_TERMINAL'),
             'password'   => env('UNLIMINT_PASSWORD'),
+        ],
+
+        'cinetpay' => [
+            'driver'  => CinetPayDriver::class,
+            'enable'  => (bool) env('CINETPAY_ENABLE', false),
+            'site_id' => env('CINETPAY_SITE_ID'),
+            'apikey'  => env('CINETPAY_APIKEY'),
         ]
     ]
 ];
