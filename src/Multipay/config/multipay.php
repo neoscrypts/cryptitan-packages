@@ -78,8 +78,8 @@ return [
         'cinetpay' => [
             'driver'  => CinetPayDriver::class,
             'enable'  => (bool) env('CINETPAY_ENABLE', false),
-            'site_id' => env('CINETPAY_SITE_ID'),
             'apikey'  => env('CINETPAY_APIKEY'),
+            'site_id' => env('CINETPAY_SITE_ID'),
         ]
     ]
 ];
