@@ -6,7 +6,6 @@ use NeoScrypts\Multipay\Drivers\PaypalDriver;
 use NeoScrypts\Multipay\Drivers\PaystackDriver;
 use NeoScrypts\Multipay\Drivers\PayUDriver;
 use NeoScrypts\Multipay\Drivers\StripeDriver;
-use NeoScrypts\Multipay\Drivers\UnlimintDriver;
 
 return [
 
@@ -64,15 +63,6 @@ return [
             'client_env'    => env('PAYU_CLIENT_ENV', 'secure'),
             'client_id'     => env('PAYU_CLIENT_ID'),
             'client_secret' => env('PAYU_CLIENT_SECRET'),
-        ],
-
-        'unlimint' => [
-            'driver'     => UnlimintDriver::class,
-            'enable'     => (bool) env('UNLIMINT_ENABLE', false),
-            'currency'   => env('UNLIMINT_CURRENCY', 'USD'),
-            'client_env' => env('UNLIMINT_CLIENT_ENV', 'production'),
-            'terminal'   => env('UNLIMINT_TERMINAL'),
-            'password'   => env('UNLIMINT_PASSWORD'),
         ],
 
         'cinetpay' => [
