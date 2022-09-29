@@ -30,7 +30,7 @@ class InstallerMiddleware
                     App::abort(403, Lang::get('license.invalid'));
                 }
             } catch (RequestException $e) {
-                App::abort(403, $e->response->json('message') ?: Lang::get('license.connection_failed'));
+                App::abort(403, $e->response->json('message') ?: Lang::get('license.unavailable'));
             }
         } else if (!$request->is('installer*', 'locale*')) {
             return Response::redirectTo('installer');
