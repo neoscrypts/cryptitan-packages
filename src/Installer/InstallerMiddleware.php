@@ -27,10 +27,10 @@ class InstallerMiddleware
         if ($installer->installed()) {
             try {
                 if (!is_array($installer->details())) {
-                    App::abort(403, Lang::get('common.license_invalid'));
+                    App::abort(403, Lang::get('license.invalid'));
                 }
             } catch (RequestException $e) {
-                App::abort(403, $e->response->json('message'));
+                App::abort(403, $e->response->json('message') ?: Lang::get('license.connection_failed'));
             }
         } else if (!$request->is('installer*', 'locale*')) {
             return Response::redirectTo('installer');
