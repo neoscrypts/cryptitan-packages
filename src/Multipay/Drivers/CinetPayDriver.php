@@ -50,10 +50,7 @@ class CinetPayDriver extends AbstractDriver
     {
         $response = $this->client->post('payment', $this->buildRequest($order))->throw()->collect('data');
 
-        return $callback(
-            $response->get('payment_token'),
-            $response->get('payment_url')
-        );
+        return $callback($order->getUuid(), $response->get('payment_url'));
     }
 
     /**
