@@ -9,6 +9,10 @@ use NeoScrypts\Multipay\Order;
 
 abstract class AbstractDriver implements DriverInterface
 {
+    const SUCCESS = 'success';
+    const REDIRECT = 'redirect';
+    const FAILURE = 'failure';
+
     /**
      * Driver name
      *
@@ -63,16 +67,46 @@ abstract class AbstractDriver implements DriverInterface
     }
 
     /**
-     * Get callback url
+     * @inheritDoc
+     */
+    public function handleReturn(array $data): string
+    {
+        return static::REDIRECT;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handleNotify(array $data): string
+    {
+        return static::SUCCESS;
+    }
+
+    /**
+     * Get return url
      *
      * @param Order $order
      * @param array $params
      * @return string
      */
-    protected function callbackUrl(Order $order, array $params = [])
+    protected function returnUrl(Order $order, array $params = [])
     {
         $params = array_merge(['order' => $order->getUuid()], $params);
 
-        return URL::route("gateway.callback", $params);
+        return URL::route("gateway.return", $params);
+    }
+
+    /**
+     * Get notify url
+     *
+     * @param Order $order
+     * @param array $params
+     * @return string
+     */
+    protected function notifyUrl(Order $order, array $params = [])
+    {
+        $params = array_merge(['order' => $order->getUuid()], $params);
+
+        return URL::route("gateway.notify", $params);
     }
 }

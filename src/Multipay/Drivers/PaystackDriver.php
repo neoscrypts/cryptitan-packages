@@ -4,6 +4,7 @@ namespace NeoScrypts\Multipay\Drivers;
 
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use NeoScrypts\Multipay\Order;
@@ -83,9 +84,20 @@ class PaystackDriver extends AbstractDriver
         return [
             'email'        => optional(Auth::user())->email,
             'reference'    => $order->getUuid(),
-            'callback_url' => $this->callbackUrl($order, ['status' => 'success']),
+            'callback_url' => $this->returnUrl($order, ['status' => 'success']),
             'amount'       => $order->getTotalAmount()->getAmount(),
             'currency'     => $order->getCurrency()->getCurrency(),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handleReturn(array $data): string
+    {
+        return match (Arr::get($data, 'status')) {
+            'success' => static::SUCCESS,
+            default => static::FAILURE,
+        };
     }
 }

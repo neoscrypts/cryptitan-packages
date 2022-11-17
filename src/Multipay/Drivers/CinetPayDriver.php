@@ -4,6 +4,7 @@ namespace NeoScrypts\Multipay\Drivers;
 
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use NeoScrypts\Multipay\Order;
@@ -98,8 +99,21 @@ class CinetPayDriver extends AbstractDriver
             'description'    => "Order #{$order->getUuid()}",
             'transaction_id' => $order->getUuid(),
             'site_id'        => $this->config('site_id'),
-            'return_url'     => $this->callbackUrl($order),
+            'return_url'     => $this->returnUrl($order),
+            'notify_url'     => $this->notifyUrl($order),
             'apikey'         => $this->config('apikey'),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     * @throws RequestException
+     */
+    public function handleNotify(array $data): string
+    {
+        $transactionId = Arr::get($data, 'transaction_id') ?: Arr::get($data, 'cpm_trans_id');
+
+        return $this->verify($transactionId) ?
+            static::SUCCESS : static::FAILURE;
     }
 }

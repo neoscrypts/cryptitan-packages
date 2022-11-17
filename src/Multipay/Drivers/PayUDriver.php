@@ -3,6 +3,7 @@
 namespace NeoScrypts\Multipay\Drivers;
 
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
@@ -106,11 +107,22 @@ class PayUDriver extends AbstractDriver
             'merchantPosId' => OpenPayU_Configuration::getOauthClientId(),
             'customerIp'    => Request::ip(),
             'description'   => "Order #" . $order->getUuid(),
-            'continueUrl'   => $this->callbackUrl($order, ['status' => 'success']),
+            'continueUrl'   => $this->returnUrl($order, ['status' => 'success']),
             'totalAmount'   => $order->getTotalAmount()->getAmount(),
             'currencyCode'  => $order->getCurrency()->getCurrency(),
             'products'      => $products->toArray()
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handleReturn(array $data): string
+    {
+        return match (Arr::get($data, 'status')) {
+            'success' => static::SUCCESS,
+            default => static::FAILURE,
+        };
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace NeoScrypts\Multipay\Drivers;
 
 use Akaunting\Money\Money;
+use Illuminate\Support\Arr;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\MollieApiClient;
 use NeoScrypts\Multipay\Order;
@@ -97,9 +98,20 @@ class MollieDriver extends AbstractDriver
         return [
             "amount"      => $this->formatAmount($order->getTotalAmount()),
             "description" => "Order #" . $order->getUuid(),
-            "redirectUrl" => $this->callbackUrl($order, ['status' => 'success']),
+            "redirectUrl" => $this->returnUrl($order, ['status' => 'success']),
             "metadata"    => ["order" => $order->getUuid()],
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handleReturn(array $data): string
+    {
+        return match (Arr::get($data, 'status')) {
+            'success' => static::SUCCESS,
+            default => static::FAILURE,
+        };
     }
 
     /**

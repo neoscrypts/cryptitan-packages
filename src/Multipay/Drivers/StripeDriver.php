@@ -2,6 +2,7 @@
 
 namespace NeoScrypts\Multipay\Drivers;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use NeoScrypts\Multipay\Order;
 use NeoScrypts\Multipay\OrderItem;
@@ -134,7 +135,7 @@ class StripeDriver extends AbstractDriver
                 'quantity'   => 1
             ]);
         } else {
-            $order->collectItems()->each(function (OrderItem $item) use ($items, $order){
+            $order->collectItems()->each(function (OrderItem $item) use ($items, $order) {
                 $items->add([
                     'price_data' => [
                         'product_data' => ['name' => $item->getName()],
@@ -148,9 +149,21 @@ class StripeDriver extends AbstractDriver
 
         return [
             'line_items'  => $items->toArray(),
-            'success_url' => $this->callbackUrl($order, ['status' => 'success']),
-            'cancel_url'  => $this->callbackUrl($order, ['status' => 'cancel']),
+            'success_url' => $this->returnUrl($order, ['status' => 'success']),
+            'cancel_url'  => $this->returnUrl($order, ['status' => 'canceled']),
             'mode'        => 'payment',
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handleReturn(array $data): string
+    {
+        return match (Arr::get($data, 'status')) {
+            'success' => static::SUCCESS,
+            'canceled' => static::FAILURE,
+            default => static::REDIRECT,
+        };
     }
 }

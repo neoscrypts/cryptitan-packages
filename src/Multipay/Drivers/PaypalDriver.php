@@ -3,6 +3,7 @@
 namespace NeoScrypts\Multipay\Drivers;
 
 use Akaunting\Money\Money;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use LogicException;
@@ -165,11 +166,23 @@ class PaypalDriver extends AbstractDriver
                 'brand_name'          => Config::get('app.name'),
                 'user_action'         => 'PAY_NOW',
                 'shipping_preference' => 'NO_SHIPPING',
-                'return_url'          => $this->callbackUrl($order, ['status' => 'success']),
-                'cancel_url'          => $this->callbackUrl($order, ['status' => 'cancel'])
+                'return_url'          => $this->returnUrl($order, ['status' => 'success']),
+                'cancel_url'          => $this->returnUrl($order, ['status' => 'canceled'])
             ],
             'purchase_units'      => [$paymentUnit]
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handleReturn(array $data): string
+    {
+        return match (Arr::get($data, 'status')) {
+            'success' => static::SUCCESS,
+            'canceled' => static::FAILURE,
+            default => static::REDIRECT,
+        };
     }
 
     /**

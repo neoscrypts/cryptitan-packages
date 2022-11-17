@@ -38,6 +38,22 @@ interface DriverInterface
     public function verify($transactionId);
 
     /**
+     * Handle return action
+     *
+     * @param array $data
+     * @return string
+     */
+    public function handleReturn(array $data): string;
+
+    /**
+     * Handle notify action
+     *
+     * @param array $data
+     * @return string
+     */
+    public function handleNotify(array $data): string;
+
+    /**
      * Check if driver supports currency
      *
      * @param string $currency
