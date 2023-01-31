@@ -22,11 +22,9 @@ class InstallerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $installer = $this->getInstaller();
-
-        if ($installer->installed()) {
+        if (App::make('installer')->installed()) {
             try {
-                if (!is_array($installer->details())) {
+                if (!App::make('installer')->hasValidLicense()) {
                     App::abort(403, Lang::get('license.invalid'));
                 }
             } catch (RequestException $e) {
@@ -37,15 +35,5 @@ class InstallerMiddleware
         }
 
         return $next($request);
-    }
-
-    /**
-     * Get installer instance
-     *
-     * @return Installer|mixed
-     */
-    protected function getInstaller()
-    {
-        return App::make('installer');
     }
 }

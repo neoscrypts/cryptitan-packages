@@ -2,10 +2,11 @@
 
 namespace NeoScrypts\Installer;
 
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -15,9 +16,9 @@ class Installer
     /**
      * Filesystem
      *
-     * @var FilesystemManager
+     * @var Filesystem
      */
-    protected $filesystem;
+    protected Filesystem $filesystem;
 
     /**
      * File name
@@ -47,24 +48,34 @@ class Installer
      */
     public function __construct($filesystem)
     {
-        $this->filesystem = $filesystem;
+        $this->filesystem = $filesystem->disk();
         $this->client = Http::baseUrl('https://license.neoscrypts.com/api/')->acceptJson();
     }
 
     /**
      * Get license details
      *
-     * @return array|null
-     * @throws FileNotFoundException
+     * @return mixed|null
      */
-    public function details(): ?array
+    public function license(): ?array
     {
-        $expires = Carbon::now()->addDay();
-        $code = $this->load();
+        if (!$code = $this->load()) {
+            return null;
+        }
 
-        return Cache::remember("license.{$code}", $expires, function () use ($code) {
-            return $this->verify($code);
+        return Cache::remember("license:$code", Carbon::now()->addDay(), function () use ($code) {
+            return $this->client->get("license/$code", ['item' => $this->item])->throw()->json();
         });
+    }
+
+    /**
+     * Check if license is valid
+     *
+     * @return bool
+     */
+    public function hasValidLicense(): bool
+    {
+        return Arr::get($this->license(), 'item') === $this->item;
     }
 
     /**
@@ -82,20 +93,6 @@ class Installer
     }
 
     /**
-     * Verify license
-     *
-     * @param string $code
-     * @return array
-     * @throws RequestException
-     */
-    protected function verify(string $code): array
-    {
-        return $this->client->get("license/{$code}", [
-            'item' => $this->item
-        ])->throw()->json();
-    }
-
-    /**
      * Register license
      *
      * @param string $code
@@ -104,6 +101,12 @@ class Installer
      */
     protected function register(string $code): array
     {
+        $response = $this->client->get("license/$code", ['item' => $this->item]);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
         return $this->client->post("license", [
             'code' => $code,
             'item' => $this->item
@@ -123,12 +126,15 @@ class Installer
     /**
      * Load license code
      *
-     * @return string
-     * @throws FileNotFoundException
+     * @return string|null
      */
-    protected function load(): string
+    protected function load(): ?string
     {
-        return unserialize($this->filesystem->get($this->path));
+        if (!$this->installed()) {
+            return null;
+        }
+
+        return @unserialize($this->filesystem->get($this->path)) ?: null;
     }
 
     /**
