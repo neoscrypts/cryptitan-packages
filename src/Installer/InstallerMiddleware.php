@@ -30,8 +30,12 @@ class InstallerMiddleware
             } catch (RequestException $e) {
                 App::abort(403, $e->response->json('message') ?: Lang::get('license.unavailable'));
             }
-        } else if (!$request->is('installer*', 'locale*')) {
-            return Response::redirectTo('installer');
+        } else if (!$request->is('installer*', '*/locale/*')) {
+            $message = Lang::get('license.required');
+
+            return $request->expectsJson() ?
+                Response::json(['message' => $message], 403) :
+                Response::redirectTo('installer');
         }
 
         return $next($request);
