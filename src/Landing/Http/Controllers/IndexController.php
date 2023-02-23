@@ -33,23 +33,13 @@ class IndexController extends Controller
     public function view()
     {
         $data = [
-            'name'     => Config::get('app.name'),
+            'name' => Config::get('app.name'),
             'settings' => [
-                'theme'    => [
-                    "mode"      => $this->settings->theme->get("mode"),
-                    "direction" => $this->settings->theme->get("direction"),
-                    "color"     => $this->settings->theme->get("color"),
-                ],
+                'theme' => $this->settings->theme->all(),
                 'exchange' => [
                     'baseCurrency' => App::make('exchanger')->config('base_currency')
                 ],
-                'brand'    => [
-                    "faviconUrl" => $this->settings->brand->get("favicon_url"),
-                    "logoUrl"    => $this->settings->brand->get("logo_url"),
-                    "supportUrl" => $this->settings->brand->get("support_url"),
-                    "termsUrl"   => $this->settings->brand->get("terms_url"),
-                    "policyUrl"  => $this->settings->brand->get("policy_url"),
-                ]
+                'brand' => $this->settings->brand->all(),
             ],
         ];
 
