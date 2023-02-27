@@ -35,9 +35,7 @@ class IndexController extends Controller
         $data = [
             'name' => Config::get('app.name'),
             'settings' => [
-                'exchange' => [
-                    'baseCurrency' => App::make('exchanger')->config('base_currency')
-                ],
+                'baseCurrency' => App::make('exchanger')->config('base_currency'),
                 'theme' => $this->settings->theme->all(),
                 'brand' => $this->settings->brand->all(),
             ],
