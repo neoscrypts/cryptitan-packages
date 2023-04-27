@@ -32,7 +32,17 @@ class IndexController extends Controller
      */
     public function view()
     {
-        $data = [
+        return View::make('landing::index', [
+            'data' => $this->getData()
+        ]);
+    }
+
+    /**
+     * Get landing page data
+     */
+    protected function getData(): array
+    {
+        return [
             'name' => Config::get('app.name'),
             'settings' => [
                 'baseCurrency' => App::make('exchanger')->config('base_currency'),
@@ -40,7 +50,5 @@ class IndexController extends Controller
                 'brand' => $this->settings->brand->all(),
             ],
         ];
-
-        return View::make('landing::index', compact('data'));
     }
 }
