@@ -59,7 +59,7 @@ class Installer
      */
     public function license(): ?array
     {
-        if (!$code = $this->load()) {
+        if (!$code = $this->getLicenseCode()) {
             return null;
         }
 
@@ -76,20 +76,6 @@ class Installer
     public function hasValidLicense(): bool
     {
         return Arr::get($this->license(), 'item') === $this->item;
-    }
-
-    /**
-     * Install code
-     *
-     * @param string $code
-     * @return array
-     * @throws RequestException
-     */
-    public function install(string $code): array
-    {
-        return tap($this->register($code), function () use ($code) {
-            $this->save($code);
-        });
     }
 
     /**
@@ -114,13 +100,17 @@ class Installer
     }
 
     /**
-     * Save license code
+     * Install code
      *
      * @param string $code
+     * @return array
+     * @throws RequestException
      */
-    protected function save(string $code)
+    public function setLicenseCode(string $code): array
     {
-        $this->filesystem->put($this->path, serialize($code));
+        return tap($this->register($code), function () use ($code) {
+            $this->filesystem->put($this->path, serialize($code));
+        });
     }
 
     /**
@@ -128,9 +118,9 @@ class Installer
      *
      * @return string|null
      */
-    protected function load(): ?string
+    public function getLicenseCode(): ?string
     {
-        if (!$this->installed()) {
+        if (!$this->hasLicenseCode()) {
             return null;
         }
 
@@ -142,7 +132,7 @@ class Installer
      *
      * @return bool
      */
-    public function installed(): bool
+    public function hasLicenseCode(): bool
     {
         return $this->filesystem->exists($this->path);
     }

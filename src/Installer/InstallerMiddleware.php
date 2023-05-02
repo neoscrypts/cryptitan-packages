@@ -22,7 +22,7 @@ class InstallerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (App::make('installer')->installed()) {
+        if (App::make('installer')->hasLicenseCode()) {
             try {
                 if (!App::make('installer')->hasValidLicense()) {
                     App::abort(403, Lang::get('license.invalid'));
