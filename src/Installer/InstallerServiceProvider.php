@@ -14,16 +14,6 @@ class InstallerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerInstaller();
-    }
-
-    /**
-     * Register installation
-     *
-     * @return void
-     */
-    protected function registerInstaller()
-    {
         $this->app->singleton('installer', function ($app) {
             return new Installer($app->make('filesystem'));
         });

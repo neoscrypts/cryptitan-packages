@@ -2,16 +2,17 @@
 
 namespace NeoScrypts\Installer;
 
+use Illuminate\Contracts\Filesystem\Factory as FactoryContract;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use NeoScrypts\Installer\Contracts\InstallerInterface;
 
-class Installer
+class Installer implements InstallerInterface
 {
     /**
      * Filesystem
@@ -44,9 +45,9 @@ class Installer
     /**
      * Installer constructor
      *
-     * @param FilesystemManager $filesystem
+     * @param FactoryContract $filesystem
      */
-    public function __construct($filesystem)
+    public function __construct(FactoryContract $filesystem)
     {
         $this->filesystem = $filesystem->disk();
         $this->client = Http::baseUrl('https://license.neoscrypts.com/api/')->acceptJson();
