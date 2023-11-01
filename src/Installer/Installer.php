@@ -8,6 +8,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use NeoScrypts\Installer\Contracts\InstallerInterface;
@@ -64,7 +65,13 @@ class Installer implements InstallerInterface
             return null;
         }
 
-        return Cache::remember("license:$code", Carbon::now()->addDay(), function () use ($code) {
+        if (App::isLocal()) {
+            $ttl = Carbon::now()->addYear();
+        } else {
+            $ttl = Carbon::now()->addDays();
+        }
+
+        return Cache::remember("license:$code", $ttl, function () use ($code) {
             return $this->client->get("license/$code", ['item' => $this->item])->throw()->json();
         });
     }
