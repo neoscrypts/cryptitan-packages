@@ -34,8 +34,8 @@
     },
     "repositories": [
         {
-            "type": "composer",
-            "url": "https://composer.neoscrypts.com"
+            "type": "vcs",
+            "url": "https://github.com/neoscrypts/laravel-money"
         }
     ],
     "extra": {
