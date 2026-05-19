@@ -4,13 +4,6 @@ namespace NeoScrypts\Installer;
 
 use Illuminate\Contracts\Filesystem\Factory as FactoryContract;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use NeoScrypts\Installer\Contracts\InstallerInterface;
 
 class Installer implements InstallerInterface
@@ -37,13 +30,6 @@ class Installer implements InstallerInterface
     protected string $item = '34496505';
 
     /**
-     * License server
-     *
-     * @var PendingRequest
-     */
-    protected PendingRequest $client;
-
-    /**
      * Installer constructor
      *
      * @param FactoryContract $filesystem
@@ -51,7 +37,6 @@ class Installer implements InstallerInterface
     public function __construct(FactoryContract $filesystem)
     {
         $this->filesystem = $filesystem->disk();
-        $this->client = Http::baseUrl('https://license.neoscrypts.com/api/')->acceptJson();
     }
 
     /**
@@ -65,15 +50,10 @@ class Installer implements InstallerInterface
             return null;
         }
 
-        if (App::isLocal()) {
-            $ttl = Carbon::now()->addYear();
-        } else {
-            $ttl = Carbon::now()->addDays();
-        }
-
-        return Cache::remember("license:$code", $ttl, function () use ($code) {
-            return $this->client->get("license/$code", ['item' => $this->item])->throw()->json();
-        });
+        return [
+            'item' => $this->item,
+            'code' => $code,
+        ];
     }
 
     /**
@@ -83,42 +63,23 @@ class Installer implements InstallerInterface
      */
     public function hasValidLicense(): bool
     {
-        return Arr::get($this->license(), 'item') === $this->item;
+        return $this->hasLicenseCode();
     }
 
     /**
-     * Register license
+     * Store license code
      *
      * @param string $code
      * @return array
-     * @throws RequestException
-     */
-    protected function register(string $code): array
-    {
-        $response = $this->client->get("license/$code", ['item' => $this->item]);
-
-        if ($response->successful()) {
-            return $response->json();
-        }
-
-        return $this->client->post("license", [
-            'code' => $code,
-            'item' => $this->item
-        ])->throw()->json();
-    }
-
-    /**
-     * Install code
-     *
-     * @param string $code
-     * @return array
-     * @throws RequestException
      */
     public function setLicenseCode(string $code): array
     {
-        return tap($this->register($code), function () use ($code) {
-            $this->filesystem->put($this->path, serialize($code));
-        });
+        $this->filesystem->put($this->path, serialize($code));
+
+        return [
+            'item' => $this->item,
+            'code' => $code,
+        ];
     }
 
     /**

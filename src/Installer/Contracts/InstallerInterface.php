@@ -2,8 +2,6 @@
 
 namespace NeoScrypts\Installer\Contracts;
 
-use Illuminate\Http\Client\RequestException;
-
 interface InstallerInterface
 {
     /**
@@ -21,11 +19,10 @@ interface InstallerInterface
     public function hasValidLicense(): bool;
 
     /**
-     * Install code
+     * Store license code
      *
      * @param string $code
      * @return array
-     * @throws RequestException
      */
     public function setLicenseCode(string $code): array;
 
